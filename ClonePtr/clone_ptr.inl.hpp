@@ -61,7 +61,7 @@ public:
 		// m_instance = nullptr;
 	}
 
-	inline T* instance() const override
+	inline T* instance() const noexcept override
 	{
 		return m_instance;
 	}

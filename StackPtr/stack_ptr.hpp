@@ -40,7 +40,7 @@ using storage_t = typename std::aligned_union<0, Args...>::type; // union is not
 struct placement_deleter
 {
 	template <typename T>
-	inline void operator()(T* const pointer) const
+	inline void operator()(T* const pointer) const noexcept
 	{
 		pointer->~T();
 	}

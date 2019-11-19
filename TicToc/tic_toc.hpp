@@ -24,7 +24,7 @@ public:
 
 	TicToc& operator=(const TicToc&) = delete;
 
-	inline void synchronize() const
+	inline void synchronize() const // noexcept
 	{
 #ifdef CUDARTAPI
 		cudaStreamSynchronize(0);

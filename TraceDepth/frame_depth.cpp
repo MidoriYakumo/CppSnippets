@@ -12,14 +12,14 @@ Copyright (c) 2019 Macrobull
 namespace
 {
 
-_Unwind_Reason_Code get_one_frame(struct _Unwind_Context * /*uc*/, void *opaque)
+_Unwind_Reason_Code get_one_frame(struct _Unwind_Context * /*uc*/, void *opaque) // noexcept
 {
 	auto depth = reinterpret_cast<size_t *>(opaque);
 	++(*depth);
 	return _URC_NO_REASON;
 }
 
-_Unwind_Reason_Code nop_backtrace(struct _Unwind_Context * /*uc*/, void * /*opaque*/)
+_Unwind_Reason_Code nop_backtrace(struct _Unwind_Context * /*uc*/, void * /*opaque*/) noexcept
 {
 	return _URC_NO_REASON;
 }

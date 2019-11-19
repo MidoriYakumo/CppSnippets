@@ -37,17 +37,17 @@ public:
 
 	optional_ptr& operator=(const optional_ptr&) = delete;
 
-	inline T& operator*() const
+	inline T& operator*() const noexcept
 	{
 		return *m_pointer;
 	}
 
-	inline T* operator->() const
+	inline T* operator->() const noexcept
 	{
 		return m_pointer;
 	}
 
-	inline bool fallback() const
+	inline bool fallback() const noexcept
 	{
 		return m_fallback;
 	}

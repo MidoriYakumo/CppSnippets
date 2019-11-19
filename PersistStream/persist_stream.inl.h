@@ -25,7 +25,7 @@ class ForwardOutStreamBuf : public std::streambuf
 	std::streambuf* m_target{nullptr};
 
 public:
-	inline void reset(std::streambuf* streambuf)
+	inline void reset(std::streambuf* streambuf) noexcept
 	{
 		m_target = streambuf;
 	}

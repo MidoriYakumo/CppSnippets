@@ -38,7 +38,7 @@ using is_data_type = std::is_arithmetic<T>;
 //// saturated_cast for numeric casting
 
 template <typename T /*required ahead*/, typename U>
-T saturated_cast(U value)
+inline T saturated_cast(U value) noexcept
 {
 	constexpr auto min_narrowed = std::numeric_limits<T>::min() > std::numeric_limits<U>::min();
 	constexpr auto max_narrowed = std::numeric_limits<T>::max() < std::numeric_limits<U>::max();
@@ -53,7 +53,7 @@ T saturated_cast(U value)
 //// for numbers, use saturated_cast
 
 template <typename T /*required ahead*/, typename U>
-enable_if_t<std::is_arithmetic<T>::value && std::is_arithmetic<U>::value, T>
+inline enable_if_t<std::is_arithmetic<T>::value && std::is_arithmetic<U>::value, T>
 cast(U value)
 {
 #if !defined(CAST_SATURATED_DEBUG_ONLY) || (defined(DEBUG) && !defined(NDEBUG))
@@ -78,29 +78,29 @@ cast(U value)
 //// for data view pointers, use static_cast via void *
 
 template <typename T /*required ahead*/, typename U>
-enable_if_t<is_data_type<remove_pointer_t<T>>::value && is_data_type<U>::value, T>
-cast(const U* value)
+inline enable_if_t<is_data_type<remove_pointer_t<T>>::value && is_data_type<U>::value, T>
+cast(const U* value) noexcept
 {
 	return static_cast<T>(static_cast<const void*>(value));
 }
 
 template <typename T /*required ahead*/, typename U>
-enable_if_t<is_data_type<remove_pointer_t<T>>::value && is_data_type<U>::value, T>
-cast(U* value)
+inline enable_if_t<is_data_type<remove_pointer_t<T>>::value && is_data_type<U>::value, T>
+cast(U* value) noexcept
 {
 	return static_cast<T>(static_cast<void*>(value));
 }
 
 template <typename T /*required ahead*/, typename U, size_t N>
-enable_if_t<is_data_type<remove_pointer_t<T>>::value && is_data_type<U>::value, T>
-cast(const U value[N])
+inline enable_if_t<is_data_type<remove_pointer_t<T>>::value && is_data_type<U>::value, T>
+cast(const U value[N]) noexcept
 {
 	return static_cast<T>(static_cast<const void*>(value));
 }
 
 template <typename T /*required ahead*/, typename U, size_t N>
-enable_if_t<is_data_type<remove_pointer_t<T>>::value && is_data_type<U>::value, T>
-cast(U value[N])
+inline enable_if_t<is_data_type<remove_pointer_t<T>>::value && is_data_type<U>::value, T>
+cast(U value[N]) noexcept
 {
 	return static_cast<T>(static_cast<void*>(value));
 }
@@ -108,7 +108,9 @@ cast(U value[N])
 //// dynamic_cast for polymorphic pointers
 
 template <typename T /*required ahead*/, typename U>
-enable_if_t<std::is_polymorphic<remove_pointer_t<T>>::value && std::is_polymorphic<U>::value, T>
+inline enable_if_t<std::is_polymorphic<remove_pointer_t<T>>::value &&
+						   std::is_polymorphic<U>::value,
+				   T>
 cast(const U* value)
 {
 #if !defined(CAST_DYNAMIC_DEBUG_ONLY) || (defined(DEBUG) && !defined(NDEBUG))
@@ -131,7 +133,9 @@ cast(const U* value)
 }
 
 template <typename T /*required ahead*/, typename U>
-enable_if_t<std::is_polymorphic<remove_pointer_t<T>>::value && std::is_polymorphic<U>::value, T>
+inline enable_if_t<std::is_polymorphic<remove_pointer_t<T>>::value &&
+						   std::is_polymorphic<U>::value,
+				   T>
 cast(U* value)
 {
 #if !defined(CAST_DYNAMIC_DEBUG_ONLY) || (defined(DEBUG) && !defined(NDEBUG))
@@ -156,13 +160,13 @@ cast(U* value)
 //// otherwise directly static_cast
 
 template <typename T /*required ahead*/, typename U>
-enable_if_t<!((std::is_arithmetic<T>::value && std::is_arithmetic<U>::value) ||
-			  (is_data_type<remove_pointer_t<T>>::value &&
-			   is_data_type<remove_pointer_t<decay_t<U>>>::value) ||
-			  (std::is_polymorphic<remove_pointer_t<T>>::value &&
-			   std::is_polymorphic<remove_pointer_t<decay_t<U>>>::value)),
-			T>
-cast(U&& value)
+inline enable_if_t<!((std::is_arithmetic<T>::value && std::is_arithmetic<U>::value) ||
+					 (is_data_type<remove_pointer_t<T>>::value &&
+					  is_data_type<remove_pointer_t<decay_t<U>>>::value) ||
+					 (std::is_polymorphic<remove_pointer_t<T>>::value &&
+					  std::is_polymorphic<remove_pointer_t<decay_t<U>>>::value)),
+				   T>
+cast(U&& value) noexcept
 {
 	return static_cast<T>(std::forward<U>(value));
 }

@@ -23,7 +23,7 @@ public:
 
 		~Locked()
 		{
-			m_parent.unlock();
+			m_parent.unlock(); // throw ?
 		}
 
 		Locked(const Locked&)     = delete;
@@ -37,22 +37,22 @@ public:
 
 	using T::T;
 
-	void lock()
+	inline void lock()
 	{
 		m_lock.lock();
 	}
 
-	bool try_lock()
+	inline bool try_lock() noexcept
 	{
 		return m_lock.try_lock();
 	}
 
-	void unlock()
+	inline void unlock()
 	{
 		m_lock.unlock();
 	}
 
-	Locked lock_guard()
+	inline Locked guard()
 	{
 		return Locked{*this};
 	}
@@ -61,12 +61,16 @@ private:
 	std::mutex m_lock; // HINT: noncopyable
 };
 
+#define LOCKABLE_VARNAME_CONCAT(base, line) base##line
+#define LOCKABLE_VARNAME(line) LOCKABLE_VARNAME_CONCAT(tic_, line)
+#define LOCKABLE_GUARD(lockable) const auto LOCKABLE_VARNAME(__LINE__) {(lockable).guard()}
+
 template <typename T>
 class Singleton
 {
 public:
 	template <typename... CArgs>
-	static T& instance(CArgs... args)
+	inline static T& instance(CArgs... args)
 	{
 		static T ret{std::forward<CArgs>(args)...};
 		return ret;

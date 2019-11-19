@@ -86,22 +86,22 @@ struct CallbackInsertIterator
 		: func{std::move(callback)}
 	{}
 
-	inline const CallbackInsertIterator& operator++() const
+	inline const CallbackInsertIterator& operator++() const noexcept
 	{
 		return *this;
 	}
 
-	inline CallbackInsertIterator& operator++()
+	inline CallbackInsertIterator& operator++() noexcept
 	{
 		return *this;
 	}
 
-	inline const FunctorType& operator*() const
+	inline const FunctorType& operator*() const noexcept
 	{
 		return func;
 	}
 
-	inline FunctorType& operator*()
+	inline FunctorType& operator*() noexcept
 	{
 		return func;
 	}
@@ -109,7 +109,6 @@ struct CallbackInsertIterator
 
 //// make iterator_traits for CallbackInsertIterator
 
-// hit cert-dcl58-cpp
 namespace std
 {
 

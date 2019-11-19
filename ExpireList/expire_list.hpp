@@ -79,22 +79,22 @@ public:
 		return m_heap.at(std::make_tuple(m_tmap.at(id), id)); // throw
 	}
 
-	inline const_iterator begin() const
+	inline const_iterator begin() const noexcept
 	{
 		return m_heap.cbegin();
 	}
 
-	inline iterator begin()
+	inline iterator begin() noexcept
 	{
 		return m_heap.begin();
 	}
 
-	inline const_iterator end() const
+	inline const_iterator end() const noexcept
 	{
 		return m_heap.cend();
 	}
 
-	inline iterator end()
+	inline iterator end() noexcept
 	{
 		return m_heap.end();
 	}
@@ -102,7 +102,7 @@ public:
 	void     erase(const IdType& id);
 	iterator erase(const iterator& it);
 
-	inline void clear()
+	inline void clear() noexcept
 	{
 		m_heap.clear();
 		m_tmap.clear();
@@ -197,7 +197,7 @@ public:
 		Base::insert(heap_items, tmap_items); // HINT: nothrow
 	}
 
-	inline void clear()
+	inline void clear() noexcept
 	{
 		Base::clear();
 		m_id = 0;

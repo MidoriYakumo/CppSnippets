@@ -47,7 +47,7 @@ public:
 		return m_pointer;
 	}
 
-	inline bool inited() const
+	inline bool inited() const noexcept
 	{
 		return m_pointer != nullptr;
 	}
@@ -61,11 +61,11 @@ public:
 		return *m_pointer;
 	}
 
-	inline bool try_destruct()
+	inline bool try_destruct() noexcept
 	{
 		if (m_pointer != nullptr)
 		{
-			m_pointer->~T(); // noexcept
+			m_pointer->~T();
 			m_pointer = nullptr;
 			return true;
 		}

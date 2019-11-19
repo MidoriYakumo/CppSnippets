@@ -59,7 +59,7 @@ int main()
 	for (int i = 0; i < 9; ++i)
 	{
 		threads.emplace_back([i]() {
-			const auto a_guard{LockableSingleton<A>::instance((i + 1) * 10 + 1).lock_guard()};
+			const Lockable<A>::Locked a_guard{LockableSingleton<A>::instance((i + 1) * 10 + 1)};
 
 			std::cout << "thread " << i << ": " << LockableSingleton<A>::instance(8).x
 					  << std::endl;
@@ -77,7 +77,7 @@ int main()
 	for (int i = 0; i < 9; ++i)
 	{
 		threads.emplace_back([i]() {
-			const Lockable<A>::Locked a_guard{Singleton<Lockable<A>>::instance(0)};
+			LOCKABLE_GUARD(Singleton<Lockable<A>>::instance(0));
 
 			Singleton<Lockable<A>>::instance(8).x = i;
 			std::cout << "thread " << i << ": " << Singleton<Lockable<A>>::instance(-8).x
